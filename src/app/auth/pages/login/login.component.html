@@ -1,0 +1,31 @@
+<!-- login.component.html -->
+<h3 class="m-4">Login</h3>
+<!-- debug : {{ fg.value | json }} | user = {{ authService.loggedInUser?.userProfile?.username| json }} -->
+<hr />
+<div class="d-flex justify-content-center">
+  <form class="w-50" [formGroup]="fg" (ngSubmit)="onLogin()">
+    <!-- @if (error) {
+      <alert type="danger" [dismissible]="true">
+        <strong>Oh snap!</strong>
+        login fail.
+      </alert>
+    } -->
+
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" formControlName="username" />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" formControlName="password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading"> <!-- ใช้ isLoading เพื่อปิดใช้งานปุ่ม -->
+      <span *ngIf="isLoading">Logging in...</span> <!-- แสดงข้อความขณะรอการล็อกอิน -->
+      <span *ngIf="!isLoading">Submit</span> <!-- แสดงข้อความปกติเมื่อไม่โหลด -->
+    </button>
+  </form>
+</div>
+
+
+

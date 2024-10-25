@@ -1,0 +1,43 @@
+<!-- register.component.html -->
+<h3 class="m-4">Register</h3>
+<hr />
+<div class="d-flex justify-content-center">
+  <form class="w-50" [formGroup]="fg" (ngSubmit)="onRegister()">
+    @if (error) {
+      <alert type="danger" [dismissible]="true">
+        <strong>Oh snap!</strong>
+        {{ message }}
+      </alert>
+    }   
+
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" formControlName="username" />
+        <div class="text-danger" [hidden]="username.valid || !username.touched">
+          Username is required and must be at least 4 characters long.
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" formControlName="password" />
+        <div class="text-danger" [hidden]="password.valid || !password.touched">
+          Password is required and must be at least 6 characters long.
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select class="form-select" id="role" formControlName="role">
+            <option value="USER">User</option>
+            <option value="ADMIN">Admin</option>
+            <option value="MANAGER">Manager</option>
+          </select>
+      </div>
+  
+      <button type="submit" class="btn btn-primary" [disabled]="fg.invalid">Submit</button>
+  </form>
+</div>
+
+
+

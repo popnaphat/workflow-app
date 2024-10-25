@@ -1,0 +1,81 @@
+<!-- item-entry.component.html -->
+<h3 class="m-4">Item Entry</h3>
+<app-budget-plan />
+<hr />
+
+<div class="row justify-content-center">
+  <div class="col-12 col-md-4">
+    <input type="text" class="form-control" id="filter" placeholder="Filter..." [formControl]="filterInput" />
+  </div>
+</div>
+
+<hr />
+<div class="d-flex justify-content-end mb-3">
+  <button class="btn btn-primary" routerLink="add">Add</button>
+</div>
+
+<table class="table table-hover table-responsive">
+  <thead>
+    <tr>
+      <th></th>
+      <th>#</th>
+      <th>Title</th>
+      <th class="text-end pe-5">Amount</th>
+      <th class="text-end pe-5">Quantity</th>
+      <th class="text-center">Contact Mobile No</th>
+      <th class="text-center">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of filterItems; trackBy: trackById">
+      <td>
+        <i class="bi bi-pencil mx-2" routerLink="edit/{{ item.id }}"></i>
+        <i class="bi bi-trash mx-2" (click)="onConfirm(item)"></i>
+      </td>
+      <td>{{ item.id }}</td>
+      <td>{{ item.title }}</td>
+      <td class="text-end pe-5">{{ item.amount | number:'1.2-2' }}</td>
+      <td class="text-end pe-5">{{ item.quantity | number:'1.2-2' }}</td>
+      <td class="text-center">{{ item.contactMobileNo | mobileFormat }}</td>
+      <td class="text-center">
+        <span class="badge"
+          [class.bg-warning]="item.status === 'PENDING'"
+          [class.bg-success]="item.status === 'APPROVED'"
+          [class.bg-danger]="item.status === 'REJECTED'">
+          {{ item.status }}
+        </span>
+      </td>
+    </tr>
+    <tr *ngIf="filterItems.length === 0">
+      <td colspan="7" class="text-center">Data not found</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination d-flex justify-content-center my-4">
+  <button
+    class="btn btn-secondary me-2"
+    (click)="onPageChange(currentPage - 1)"
+    [disabled]="currentPage === 1"
+  >
+    Previous
+  </button>
+
+  <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+    <button
+      class="btn"
+      [ngClass]="{'btn-primary': currentPage === (i + 1), 'btn-outline-primary': currentPage !== (i + 1)}"
+      (click)="onPageChange(i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+  </ng-container>
+
+  <button
+    class="btn btn-secondary ms-2"
+    (click)="onPageChange(currentPage + 1)"
+    [disabled]="currentPage === totalPages"
+  >
+    Next
+  </button>
+</div>

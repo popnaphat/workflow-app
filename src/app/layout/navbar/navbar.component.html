@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-md bg-custom navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center ms-3" routerLink="/">
+      <img src="happy.png" alt="logo" width="60" height="48" />
+      <span>Budget App</span>
+    </a>
+    
+      <ul class="navbar-nav me-auto">
+        <!-- ใช้ *ngFor เพื่อวนลูปเมนู -->
+        <li class="nav-item" *ngFor="let menu of menus; trackBy: trackByPath">
+          <a class="nav-link" [routerLink]="menu.path">{{ menu.title }}</a>
+        </li>
+      </ul>
+   
+    
+    <!-- ใช้ *ngIf เพื่อตรวจสอบว่าผู้ใช้ล็อกอินหรือไม่ -->
+    <span class="navbar-text" *ngIf="authService.loggedInUser as loggedInUser; else guest">
+      <span>{{ loggedInUser.userProfile.username }}</span>
+      |
+      <i class="bi bi-box-arrow-in-right align-middle text-primary me-3" (click)="onLogout()"></i>
+    </span>
+
+    <!-- ถ้าผู้ใช้ยังไม่ล็อกอิน แสดงปุ่มล็อกอิน/สมัครสมาชิก -->
+    <ng-template #guest>
+      <button class="btn btn-primary me-3" type="button" routerLink="/auth/register">Register</button>
+      <button class="btn btn-success me-3" type="button" routerLink="/auth/login">Login</button>
+      <button class="btn btn-outline-warning me-3" type="button" (click)="onKeycloakLogin()">Login by Keycloak</button>
+    </ng-template>
+  
+  </div>
+</nav>
