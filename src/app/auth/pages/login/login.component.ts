@@ -26,8 +26,8 @@ export  class LoginComponent implements OnInit {
 
   // init form
   fb = inject(NonNullableFormBuilder);
-  username = this.fb.control('u1001');
-  password = this.fb.control('changeit');
+  username = this.fb.control('');
+  password = this.fb.control('');
 
   fg = this.fb.group({
     username: this.username,
