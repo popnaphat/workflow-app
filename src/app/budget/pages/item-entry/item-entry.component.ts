@@ -60,8 +60,8 @@ export class ItemEntryComponent implements OnInit, OnDestroy {
     // Setup filter with debounce
     this.filterInput.valueChanges
       .pipe(
-        takeUntil(this.destroy),
-        debounceTime(300),  //หน่วง 0.3 วิ
+        takeUntil(this.destroy), // unsubscribe เมื่อ component ถูกทำลาย, ป้องกัน Memory Leak
+        debounceTime(300),  // รอ user หยุดพิมพ์ 0.3 sec
         distinctUntilChanged() //emit ค่าใหม่เมื่อค่านั้นแตกต่างจากค่าก่อนหน้า
       )
       .subscribe(keyword => {
