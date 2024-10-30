@@ -19,6 +19,7 @@ export class AuthService {
   router = inject(Router);
 
   loggedInUser: LoggedInUser | null = null;
+  private isKeycloakLogin = false;  // เพิ่มตัวแปรนี้เพื่อระบุว่าใช้ Keycloak หรือไม่
 
   // add
   constructor() {
@@ -36,6 +37,7 @@ export class AuthService {
     username: string;
     password: string;
   }): Observable<Tokens> {
+    this.isKeycloakLogin = false; // เมื่อใช้ระบบภายใน ให้ตั้งเป็น false
     return this.httpClient
       .post<Tokens>(this.URL, credential)
       .pipe(tap((newToken) => this.setTokens(newToken)));
@@ -48,13 +50,22 @@ export class AuthService {
   }
 
   logout(): void {
+    const keycloakLogoutUrl = `http://localhost:8080/realms/pop/protocol/openid-connect/logout?client_id=budget-app&redirect_uri=http://localhost:4200/auth/login`;
+
+    // ลบ token ใน local storage
     this.loggedInUser = null;
     sessionStorage.removeItem(this.TOKENS);
-    this.router.navigate(['/auth/login']);
+
+    // ตรวจสอบว่าผู้ใช้ล็อกอินผ่าน Keycloak หรือไม่
+    if (this.isKeycloakLogin) {
+      window.location.href = keycloakLogoutUrl; // logout ผ่าน Keycloak
+    } else {
+      this.router.navigate(['/auth/login']); // logout ผ่านระบบภายใน
+    }
   }
 
   refreshToken(): Observable<{ access_token: string }> {
-    console.log(AuthService.name);
+    console.log(AuthService.name);  
     return this.httpClient.post<{ access_token: string }>(
       `${this.envConfig.apiUrl}/auth/refresh`,
       null,

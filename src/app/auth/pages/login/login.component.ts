@@ -40,6 +40,7 @@ export  class LoginComponent implements OnInit {
 
   ngOnInit() {
     if (this.code) {
+      console.log(this.code)
       this.authService
         .loginOauth2(this.code)
         .subscribe(() => this.router.navigate(['/']));
